@@ -20,9 +20,61 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddRazorPages(); // Adiciona suporte para as páginas de login/registro
+builder.Services.AddRazorPages(); // Adiciona suporte para as pï¿½ginas de login/registro
 
 var app = builder.Build();
+
+try
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+
+        // Pega os gerenciadores de Papï¿½is e Usuï¿½rios
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+        // Nomes dos papï¿½is
+        string[] roleNames = { "Administrador", "Advogado", "Cliente" };
+
+        // Cria os papï¿½is se eles nï¿½o existirem
+        foreach (var roleName in roleNames)
+        {
+            var roleExist = await roleManager.RoleExistsAsync(roleName);
+            if (!roleExist)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
+
+        // --- Cria o usuï¿½rio Admin padrï¿½o ---
+        var adminUserEmail = "admin@admin.com";
+        var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
+
+        if (adminUser == null)
+        {
+            ApplicationUser newAdmin = new ApplicationUser
+            {
+                UserName = adminUserEmail,
+                Email = adminUserEmail,
+                EmailConfirmed = true // Confirma o email direto
+            };
+
+            var result = await userManager.CreateAsync(newAdmin, "admin");
+
+            if (result.Succeeded)
+            {
+                // Associa o usuï¿½rio ao papel "Administrador"
+                await userManager.AddToRoleAsync(newAdmin, "Administrador");
+            }
+        }
+    }
+}
+catch (Exception ex)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "Ocorreu um erro ao semear o banco de dados.");
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -37,8 +89,8 @@ app.UseRouting();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseAuthentication(); // <-- Adiciona o "Quem é você?"
-app.UseAuthorization();  // <-- Adiciona o "O que você pode fazer?"
+app.UseAuthentication(); // <-- Adiciona o "Quem ï¿½ vocï¿½?"
+app.UseAuthorization();  // <-- Adiciona o "O que vocï¿½ pode fazer?"
 
 app.MapRazorPages(); // Mapeia as rotas de login (ex: /Account/Login)
 
