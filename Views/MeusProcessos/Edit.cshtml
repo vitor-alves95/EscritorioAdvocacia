@@ -1,0 +1,44 @@
+﻿@model EscritorioAdvocacia.Models.Processo
+
+@{
+    ViewData["Title"] = "Atualizar Andamento";
+}
+
+<h1>Atualizar Andamento</h1>
+<h4>Processo: @Model.Titulo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label class="control-label">Nº Processo</label>
+                <input asp-for="NumeroUnificado" class="form-control" disabled />
+            </div>
+            <div class="form-group mb-3">
+                <label class="control-label">Cliente</label>
+                <input value="@Model.Cliente?.Nome" class="form-control" disabled />
+            </div>
+
+            <hr />
+
+            <div class="form-group mb-3">
+                <label asp-for="StatusAndamento" class="control-label"></label>
+                <input asp-for="StatusAndamento" class="form-control" />
+                <span asp-validation-for="StatusAndamento" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DescricaoAndamento" class="control-label">Descrição do Andamento</label>
+                <textarea asp-for="DescricaoAndamento" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="DescricaoAndamento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

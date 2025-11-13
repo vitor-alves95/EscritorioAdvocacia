@@ -1,0 +1,79 @@
+﻿@model IEnumerable<EscritorioAdvocacia.Models.Processo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroUnificado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusAndamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescricaoAndamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataAbertura)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdvogadoResponsavel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoProcesso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VaraOrigem)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroUnificado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusAndamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescricaoAndamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataAbertura)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdvogadoResponsavel.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoProcesso.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VaraOrigem.Id)
+            </td>
+            <td>
+                    <a asp-controller="MeusProcessos" asp-action="Edit" asp-route-id="@item.Id">Editar Andamento</a> |
+                    <a asp-controller="MeusProcessos" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -50,6 +50,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Processos" asp-action="Index"><b>Gerenciar Processos</b></a>
                             </li>
                         }
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Advogado"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="MeusProcessos" asp-action="Index"><b>Meus Processos</b></a>
+                            </li>
+                        }
                     </ul>
 
                     <partial name="_LoginPartial" />

@@ -28,6 +28,13 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ApplicationUserId" class="control-label">Associar ao Login (Usuário)</label>
+                <select asp-for="ApplicationUserId" class="form-control" asp-items="@(ViewData["ApplicationUserId"] as SelectList)">
+                    <option value="">-- Nenhum (Ainda não tem login) --</option>
+                </select>
+                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

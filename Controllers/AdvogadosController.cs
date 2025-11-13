@@ -1,4 +1,5 @@
-﻿using EscritorioAdvocacia.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using EscritorioAdvocacia.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,16 +15,21 @@ namespace EscritorioAdvocacia.Controllers
     public class AdvogadosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdvogadosController(ApplicationDbContext context)
+        public AdvogadosController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Advogados
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Advogados.ToListAsync());
+            var advogados = await _context.Advogados
+                                        .Include(a => a.ApplicationUser)
+                                        .ToListAsync();
+            return View(advogados);
         }
 
         // GET: Advogados/Details/5
@@ -35,6 +41,7 @@ namespace EscritorioAdvocacia.Controllers
             }
 
             var advogado = await _context.Advogados
+                .Include(a => a.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (advogado == null)
             {
@@ -47,15 +54,14 @@ namespace EscritorioAdvocacia.Controllers
         // GET: Advogados/Create
         public IActionResult Create()
         {
+            PopulateUsersDropdown();
             return View();
         }
 
         // POST: Advogados/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,OAB,Email")] Advogado advogado)
+        public async Task<IActionResult> Create([Bind("Id,Nome,OAB,Email,ApplicationUserId")] Advogado advogado)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +69,7 @@ namespace EscritorioAdvocacia.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            PopulateUsersDropdown();
             return View(advogado);
         }
 
@@ -79,15 +86,14 @@ namespace EscritorioAdvocacia.Controllers
             {
                 return NotFound();
             }
+            PopulateUsersDropdown();
             return View(advogado);
         }
 
         // POST: Advogados/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,OAB,Email")] Advogado advogado)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,OAB,Email,ApplicationUserId")] Advogado advogado)
         {
             if (id != advogado.Id)
             {
@@ -114,6 +120,7 @@ namespace EscritorioAdvocacia.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateUsersDropdown();
             return View(advogado);
         }
 
@@ -126,6 +133,7 @@ namespace EscritorioAdvocacia.Controllers
             }
 
             var advogado = await _context.Advogados
+                .Include(a => a.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (advogado == null)
             {
@@ -154,5 +162,11 @@ namespace EscritorioAdvocacia.Controllers
         {
             return _context.Advogados.Any(e => e.Id == id);
         }
-    }
-}
+
+        private void PopulateUsersDropdown()
+        {
+            var users = _userManager.Users.OrderBy(u => u.UserName).ToList();
+            ViewData["ApplicationUserId"] = new SelectList(users, "Id", "UserName");
+        }
+    } 
+} 
