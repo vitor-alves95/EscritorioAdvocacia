@@ -4,50 +4,50 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Configuração do Banco de Dados
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("conexao")));
 
+// 2. Configuração do Identity
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
+
+    // Regras de senha (para desenvolvimento)
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredLength = 3; // <-- ADICIONEI ISSO: Permite senhas curtas se você quiser
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddRazorPages(); // Adiciona suporte para as p�ginas de login/registro
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+// --- ÁREA DE SEED (CRIAÇÃO DE DADOS INICIAIS) ---
 try
 {
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
-
-        // Pega os gerenciadores de Pap�is e Usu�rios
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-        // Nomes dos pap�is
+        // 1. Criar Papéis
         string[] roleNames = { "Administrador", "Advogado", "Cliente" };
-
-        // Cria os pap�is se eles n�o existirem
         foreach (var roleName in roleNames)
         {
-            var roleExist = await roleManager.RoleExistsAsync(roleName);
-            if (!roleExist)
+            if (!await roleManager.RoleExistsAsync(roleName))
             {
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
         }
 
-        // --- Cria o usu�rio Admin padr�o ---
+        // 2. Criar Admin
         var adminUserEmail = "admin@admin.com";
         var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
 
@@ -57,15 +57,24 @@ try
             {
                 UserName = adminUserEmail,
                 Email = adminUserEmail,
-                EmailConfirmed = true // Confirma o email direto
+                EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(newAdmin, "admin");
+            
+            var result = await userManager.CreateAsync(newAdmin, "admin123");
 
             if (result.Succeeded)
             {
-                // Associa o usu�rio ao papel "Administrador"
                 await userManager.AddToRoleAsync(newAdmin, "Administrador");
+                Console.WriteLine("USUARIO ADMIN CRIADO COM SUCESSO!"); // Mensagem no console
+            }
+            else
+            {
+                // Loga o erro exato se falhar
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"ERRO AO CRIAR ADMIN: {error.Description}");
+                }
             }
         }
     }
@@ -73,28 +82,25 @@ try
 catch (Exception ex)
 {
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "Ocorreu um erro ao semear o banco de dados.");
+    logger.LogError(ex, "Ocorreu um erro crítico ao semear o banco de dados.");
 }
+// --- FIM DO SEED ---
 
-// Configure the HTTP request pipeline.
+
+// --- PIPELINE (A ordem aqui importa muito) ---
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
-app.UseStaticFiles();
-app.UseRouting();
+app.UseStaticFiles(); // Arquivos estáticos (CSS, JS) vêm antes do Roteamento
 
-app.UseAuthentication(); // <-- Adiciona o "Quem � voc�?"
-app.UseAuthorization();  // <-- Adiciona o "O que voc� pode fazer?"
+app.UseRouting(); // Roteamento UMA vez só
 
-app.MapRazorPages(); // Mapeia as rotas de login (ex: /Account/Login)
-
-app.UseAuthorization();
+app.UseAuthentication(); // Quem é você?
+app.UseAuthorization();  // O que você pode fazer?
 
 app.MapStaticAssets();
 
@@ -103,5 +109,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages();
 
 app.Run();
