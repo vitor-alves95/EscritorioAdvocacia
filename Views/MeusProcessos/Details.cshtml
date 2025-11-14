@@ -40,29 +40,32 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DataAbertura)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cliente)
+        <dt class="col-sm-2">
+            Cliente
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cliente.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cliente.Nome)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AdvogadoResponsavel)
+
+        <dt class="col-sm-2">
+            Advogado Responsável
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AdvogadoResponsavel.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AdvogadoResponsavel.Nome)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoProcesso)
+
+        <dt class="col-sm-2">
+            Tipo de Processo
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoProcesso.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipoProcesso.Nome)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VaraOrigem)
+
+        <dt class="col-sm-2">
+            Vara de Origem
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VaraOrigem.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VaraOrigem.Nome)
         </dd>
     </dl>
 </div>

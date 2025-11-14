@@ -7,23 +7,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EscritorioAdvocacia.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace EscritorioAdvocacia.Controllers
 {
     [Authorize(Roles = "Administrador")]
     public class ClientesController : Controller
     {
+     
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClientesController(ApplicationDbContext context)
+        public ClientesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clientes.ToListAsync());
+            var clientes = await _context.Clientes.Include(c => c.ApplicationUser).ToListAsync();
+            return View(clientes);
         }
 
         // GET: Clientes/Details/5
@@ -35,7 +40,9 @@ namespace EscritorioAdvocacia.Controllers
             }
 
             var cliente = await _context.Clientes
+                .Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
             {
                 return NotFound();
@@ -47,15 +54,14 @@ namespace EscritorioAdvocacia.Controllers
         // GET: Clientes/Create
         public IActionResult Create()
         {
+            PopulateUsersDropdown();
             return View();
         }
 
         // POST: Clientes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,CPF,Email,Telefone")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Id,Nome,CPF,Email,Telefone,ApplicationUserId")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +69,7 @@ namespace EscritorioAdvocacia.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            PopulateUsersDropdown();
             return View(cliente);
         }
 
@@ -79,15 +86,14 @@ namespace EscritorioAdvocacia.Controllers
             {
                 return NotFound();
             }
+            PopulateUsersDropdown();
             return View(cliente);
         }
 
         // POST: Clientes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,CPF,Email,Telefone")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,CPF,Email,Telefone,ApplicationUserId")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -114,6 +120,7 @@ namespace EscritorioAdvocacia.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateUsersDropdown();
             return View(cliente);
         }
 
@@ -126,7 +133,9 @@ namespace EscritorioAdvocacia.Controllers
             }
 
             var cliente = await _context.Clientes
+                .Include(c => c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
             {
                 return NotFound();
@@ -153,6 +162,12 @@ namespace EscritorioAdvocacia.Controllers
         private bool ClienteExists(int id)
         {
             return _context.Clientes.Any(e => e.Id == id);
+        }
+
+        private void PopulateUsersDropdown()
+        {
+            var users = _userManager.Users.OrderBy(u => u.UserName).ToList();
+            ViewData["ApplicationUserId"] = new SelectList(users, "Id", "UserName");
         }
     }
 }
