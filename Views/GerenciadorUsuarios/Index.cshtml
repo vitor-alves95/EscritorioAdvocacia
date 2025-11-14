@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Gerenciar Usuários";
+}
+
+<h1>Gerenciar Usuários e Permissões</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email (Login)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="EditRoles" asp-route-id="@user.Id">
+                        Editar Permissões
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

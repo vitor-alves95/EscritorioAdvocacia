@@ -49,6 +49,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Processos" asp-action="Index"><b>Gerenciar Processos</b></a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-area="" asp-controller="GerenciadorUsuarios" asp-action="Index"><b>Gerenciar Usuários</b></a>
+                            </li>
                         }
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Advogado"))
                         {
