@@ -35,7 +35,7 @@ try
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
 
-        string[] roleNames = { "Administrador", "Advogado", "Cliente" };
+        string[] roleNames = { "Administrador", "Advogado", "Cliente", "Controladoria" };
         foreach (var roleName in roleNames)
         {
             if (!await roleManager.RoleExistsAsync(roleName))

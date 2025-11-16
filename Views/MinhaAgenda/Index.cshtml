@@ -1,0 +1,66 @@
+﻿@model IEnumerable<EscritorioAdvocacia.Models.Compromisso>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Minha Agenda</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataHoraInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataHoraFim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Local)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Advogado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Processo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataHoraInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataHoraFim)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Local)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Advogado.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Processo.NumeroUnificado)
+            </td>
+            <td>
+                <a asp-controller="MinhaAgenda" asp-action="Details" asp-route-id="@item.Id">Ver Detalhes</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

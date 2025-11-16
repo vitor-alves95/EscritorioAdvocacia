@@ -25,5 +25,7 @@ namespace EscritorioAdvocacia.Models
         public virtual ApplicationUser? ApplicationUser { get; set; }
 
         public virtual ICollection<Processo> Processos { get; set; }
+
+        public virtual ICollection<Compromisso> Compromissos { get; set; }
     }
 }

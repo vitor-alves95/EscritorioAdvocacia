@@ -30,5 +30,7 @@ namespace EscritorioAdvocacia.Models
 
         public int VaraOrigemId { get; set; }
         public virtual VaraOrigem VaraOrigem { get; set; }
+
+        public virtual ICollection<Compromisso> Compromissos { get; set; }
     }
 }

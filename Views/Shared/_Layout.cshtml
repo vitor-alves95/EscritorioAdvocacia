@@ -58,11 +58,20 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="MeusProcessos" asp-action="Index"><b>Meus Processos</b></a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="MinhaAgenda" asp-action="Index">Minha Agenda</a>
+                            </li>
                         }
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Cliente"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="PortalDoCliente" asp-action="Index"><b>Meus Processos</b></a>
+                            </li>
+                        }
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Controladoria"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agenda" asp-action="Index"><b>Gerenciar Agenda</b></a>
                             </li>
                         }
                     </ul>
