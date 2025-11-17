@@ -1,36 +1,61 @@
 ﻿@model EscritorioAdvocacia.Models.Advogado
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Advogado";
 }
 
-<h1>Details</h1>
+<h1 class="mb-4">Detalhes do Advogado: @Model.Nome</h1>
 
-<div>
-    <h4>Advogado</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OAB)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OAB)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Informações de Registro</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Nome)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nome)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.OAB)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.OAB)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-9">
+                <a href="mailto:@Model.Email">@Html.DisplayFor(model => model.Email)</a>
+            </dd>
+
+            @if (Model.ApplicationUserId != null)
+            {
+                <dt class="col-sm-3">
+                    Login Associado
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.ApplicationUser.UserName)
+                </dd>
+            }
+        </dl>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning me-2" title="Editar Advogado">
+        <i class="fas fa-edit"></i> Editar
+    </a>
+
+    <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger me-2" title="Excluir Advogado">
+        <i class="fas fa-trash-alt"></i> Excluir
+    </a>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Voltar à Lista
+    </a>
 </div>
