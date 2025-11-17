@@ -8,28 +8,28 @@ using System.Threading.Tasks;
 
 namespace EscritorioAdvocacia.Controllers
 {
-    // 1. Tranca o controlador inteiro apenas para o "Advogado"
+   
     [Authorize(Roles = "Advogado")]
     public class MeusProcessosController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        // 2. Injete o DbContext e o UserManager
+       
         public MeusProcessosController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // 3. Método auxiliar para encontrar o Perfil de Advogado do login atual
+        
         private async Task<Advogado> GetAdvogadoProfileAsync()
         {
-            // Pega o usuário (login) atual
+            
             var appUser = await _userManager.GetUserAsync(User);
             if (appUser == null) return null;
 
-            // Encontra o perfil de Advogado (com OAB, etc.) ligado a esse login
+            
             var advogadoProfile = await _context.Advogados
                 .FirstOrDefaultAsync(a => a.ApplicationUserId == appUser.Id);
 
@@ -43,15 +43,15 @@ namespace EscritorioAdvocacia.Controllers
             var advogado = await GetAdvogadoProfileAsync();
             if (advogado == null)
             {
-                // Se o Admin não associou o login a um perfil, ele não pode ver nada.
+                
                 return View("AcessoNegado");
             }
 
-            // 4. A consulta mágica: Filtra processos ONDE AdvogadoId == o Id do perfil dele
+            
             var processos = await _context.Processos
                 .Where(p => p.AdvogadoId == advogado.Id)
-                .Include(p => p.Cliente) // Inclui o nome do cliente
-                .Include(p => p.TipoProcesso) // Inclui o tipo
+                .Include(p => p.Cliente) 
+                .Include(p => p.TipoProcesso) 
                 .OrderByDescending(p => p.DataAbertura)
                 .ToListAsync();
 
@@ -66,7 +66,7 @@ namespace EscritorioAdvocacia.Controllers
             var advogado = await GetAdvogadoProfileAsync();
             if (advogado == null) return View("AcessoNegado");
 
-            // 5. Segurança: Pega o processo SÓ SE o ID bater E o AdvogadoId for dele
+            
             var processo = await _context.Processos
                 .Include(p => p.Cliente)
                 .Include(p => p.TipoProcesso)
@@ -76,7 +76,7 @@ namespace EscritorioAdvocacia.Controllers
 
             if (processo == null)
             {
-                // Se não achou (ou não é dele), retorna NotFound
+                
                 return NotFound();
             }
 
@@ -91,7 +91,7 @@ namespace EscritorioAdvocacia.Controllers
             var advogado = await GetAdvogadoProfileAsync();
             if (advogado == null) return View("AcessoNegado");
 
-            // 6. Segurança: Busca o processo para edição SÓ SE for dele
+            
             var processo = await _context.Processos
                 .FirstOrDefaultAsync(p => p.Id == id && p.AdvogadoId == advogado.Id);
 
@@ -110,7 +110,7 @@ namespace EscritorioAdvocacia.Controllers
             var advogado = await GetAdvogadoProfileAsync();
             if (advogado == null) return View("AcessoNegado");
 
-            // 7. Busca o processo original do banco (para segurança)
+            
             var processoToUpdate = await _context.Processos
                 .FirstOrDefaultAsync(p => p.Id == id && p.AdvogadoId == advogado.Id);
 
@@ -118,7 +118,7 @@ namespace EscritorioAdvocacia.Controllers
 
             if (ModelState.IsValid)
             {
-                // 8. Atualiza SÓ OS CAMPOS PERMITIDOS
+                
                 processoToUpdate.StatusAndamento = processoInput.StatusAndamento;
                 processoToUpdate.DescricaoAndamento = processoInput.DescricaoAndamento;
 
@@ -137,7 +137,7 @@ namespace EscritorioAdvocacia.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Se o modelo for inválido, retorna para a View com o processo (carregado do banco)
+            
             return View(processoToUpdate);
         }
     }

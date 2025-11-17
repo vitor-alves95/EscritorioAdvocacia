@@ -1,6 +1,9 @@
 ﻿@model IEnumerable<ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Gerenciar Usuários";
+    var currentUserId = UserManager.GetUserId(User);
 }
 
 <h1>Gerenciar Usuários e Permissões</h1>
@@ -20,6 +23,13 @@
                     <a class="btn btn-warning btn-sm" asp-action="EditRoles" asp-route-id="@user.Id">
                         Editar Permissões
                     </a>
+
+                    @if (user.Id != currentUserId)
+                    {
+                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@user.Id">
+                            Deletar
+                        </a>
+                    }
                 </td>
             </tr>
         }

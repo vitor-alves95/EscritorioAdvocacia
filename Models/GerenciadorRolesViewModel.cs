@@ -12,6 +12,6 @@
     {
         public string RoleId { get; set; }
         public string RoleName { get; set; }
-        public bool IsSelected { get; set; } // O "checked" do checkbox
+        public bool IsSelected { get; set; }
     }
 }

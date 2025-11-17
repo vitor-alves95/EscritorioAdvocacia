@@ -172,16 +172,14 @@ namespace EscritorioAdvocacia.Controllers
             return _context.Processos.Any(e => e.Id == id);
         }
 
-        // *** CORREÇÃO AQUI ***
-        // O método foi movido para dentro da classe
+        
         private void PopulateDropdowns()
         {
-            // O Tag Helper 'asp-for' no CSHTML vai selecionar o valor correto automaticamente
-            // com base no '@model Processo' que é passado para a View.
+            
             ViewData["AdvogadoId"] = new SelectList(_context.Advogados.OrderBy(a => a.Nome), "Id", "Nome");
             ViewData["ClienteId"] = new SelectList(_context.Clientes.OrderBy(c => c.Nome), "Id", "Nome");
             ViewData["TipoProcessoId"] = new SelectList(_context.TiposProcessos.OrderBy(t => t.Nome), "Id", "Nome");
             ViewData["VaraOrigemId"] = new SelectList(_context.VarasOrigem.OrderBy(v => v.Nome), "Id", "Nome");
         }
-    } // <-- Fim da classe ProcessosController
-} // <-- Fim do namespace
+    } 
+} 
