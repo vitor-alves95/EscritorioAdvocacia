@@ -1,66 +1,62 @@
 ﻿@model IEnumerable<EscritorioAdvocacia.Models.Compromisso>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Minha Agenda";
 }
 
-<h1>Minha Agenda</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="far fa-calendar-alt text-success me-2"></i> Minha Agenda</h1>
+    <p>
 
-<table class="table">
-    <thead>
+    </p>
+</div>
+
+<table class="table table-striped table-hover table-bordered table-responsive-lg">
+    <thead class="table-dark">
         <tr>
-            <th>
+            <th style="width: 25%;">
                 @Html.DisplayNameFor(model => model.Titulo)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataHoraInicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataHoraFim)
+            <th style="width: 20%;">
+                Data e Hora
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Local)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Advogado)
+                Advogado
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Processo)
+                Processo
             </th>
-            <th></th>
+            <th class="text-center" style="width: 120px;">Ações</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataHoraInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataHoraFim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Local)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Advogado.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Processo.NumeroUnificado)
-            </td>
-            <td>
-                <a asp-controller="MinhaAgenda" asp-action="Details" asp-route-id="@item.Id">Ver Detalhes</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titulo)
+                </td>
+                <td>
+                    @item.DataHoraInicio.ToString("dd/MM HH:mm") - @item.DataHoraFim.ToString("HH:mm")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Local)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Advogado.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Processo.Titulo)
+                </td>
+                <td class="text-center">
+                    <a asp-controller="MinhaAgenda" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white" title="Ver Detalhes">
+                        <i class="fas fa-eye"></i> Detalhes
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

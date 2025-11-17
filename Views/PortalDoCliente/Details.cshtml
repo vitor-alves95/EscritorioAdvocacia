@@ -1,74 +1,76 @@
 ﻿@model EscritorioAdvocacia.Models.Processo
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Processo";
 }
 
-<h1>Detalhes do Processo</h1>
+<h1 class="mb-4"><i class="fas fa-balance-scale text-primary me-2"></i> Detalhes do Processo</h1>
+<h4 class="text-secondary mb-4">Processo Nº: @Model.NumeroUnificado</h4>
 
-<div>
-    <h4>Processo</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumeroUnificado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumeroUnificado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusAndamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusAndamento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DescricaoAndamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DescricaoAndamento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataAbertura)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataAbertura)
-        </dd>
-        <dt class="col-sm-2">
-            Cliente
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Cliente.Nome)
-        </dd>
+<div class="row">
 
-        <dt class="col-sm-2">
-            Advogado Responsável
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AdvogadoResponsavel.Nome)
-        </dd>
+    <div class="col-md-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Informações e Partes Envolvidas</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
 
-        <dt class="col-sm-2">
-            Tipo de Processo
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TipoProcesso.Nome)
-        </dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Titulo):</dt>
+                    <dd class="col-sm-8"><strong>@Html.DisplayFor(model => model.Titulo)</strong></dd>
 
-        <dt class="col-sm-2">
-            Vara de Origem
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaraOrigem.Nome)
-        </dd>
-    </dl>
+                    <dt class="col-sm-4">Nº Unificado:</dt>
+                    <dd class="col-sm-8"><strong>@Html.DisplayFor(model => model.NumeroUnificado)</strong></dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DataAbertura):</dt>
+                    <dd class="col-sm-8">@Model.DataAbertura.ToString("dd/MM/yyyy")</dd>
+
+                    <dt class="col-sm-4">Tipo  Processo:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.TipoProcesso.Nome)</dd>
+
+                    <dt class="col-sm-4">Vara de Origem:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.VaraOrigem.Nome)</dd>
+
+                    <dt class="col-sm-12"><hr> /></dt>
+
+                    <dt class="col-sm-4">Cliente:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.Cliente.Nome)</dd>
+
+                    <dt class="col-sm-4">Advogado Responsável:</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.AdvogadoResponsavel.Nome)</dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Status e Histórico</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-12">@Html.DisplayNameFor(model => model.StatusAndamento):</dt>
+                    <dd class="col-sm-12 mb-3">
+                        <span class="badge bg-success fs-6">@Html.DisplayFor(model => model.StatusAndamento)</span>
+                    </dd>
+
+                    <dt class="col-sm-12">@Html.DisplayNameFor(model => model.DescricaoAndamento):</dt>
+                    <dd class="col-sm-12">
+                        <pre class="bg-light p-3 border rounded" style="white-space: pre-wrap; font-size: 0.9rem; max-height: 400px; overflow-y: auto;">@Html.DisplayFor(model => model.DescricaoAndamento)</pre>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Index">Voltar para Meus Processos</a>
+
+<div class="mt-2">
+    <a asp-action="Index" class="btn btn-secondary btn-lg">
+        <i class="fas fa-arrow-left"></i> Voltar para Lista de Processos
+    </a>
+
+
 </div>
