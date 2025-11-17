@@ -1,83 +1,98 @@
 ﻿@model IEnumerable<EscritorioAdvocacia.Models.Processo>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gerenciamento de Processos";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-balance-scale text-info me-2"></i> Gerenciamento de Processos</h1>
+    <p>
+        <a asp-action="Create" class="btn btn-info text-white">
+            <i class="fas fa-file-plus me-1"></i> Abrir Novo Processo
+        </a>
+    </p>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NumeroUnificado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusAndamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DescricaoAndamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataAbertura)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cliente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdvogadoResponsavel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoProcesso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VaraOrigem)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumeroUnificado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StatusAndamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescricaoAndamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataAbertura)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cliente.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdvogadoResponsavel.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoProcesso.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VaraOrigem.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered table-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    Numero Unificado
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Data Abertura
+                </th>
+                <th style="min-width: 150px;">
+                    @Html.DisplayNameFor(model => model.Cliente)
+                </th>
+                <th style="min-width: 150px;">
+                    Advogado Responsavel
+                </th>
+                <th>
+                    Tipo
+                </th>
+                <th>
+                    Vara
+                </th>
+                <th>Descrição Andamento</th>
+                <th class="text-center" style="min-width: 120px;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroUnificado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            @Html.DisplayFor(modelItem => item.StatusAndamento)
+                        </span>
+                    </td>
+                    <td>
+                        @item.DataAbertura.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cliente.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdvogadoResponsavel.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoProcesso.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VaraOrigem.Nome)
+                    </td>
+                    <td>
+                        @(item.DescricaoAndamento != null && item.DescricaoAndamento.Length > 50
+                                            ? item.DescricaoAndamento.Substring(0, 50) + "..."
+                                            : item.DescricaoAndamento)
+                </td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white me-1" title="Detalhes">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+                        }
+        </tbody>
+    </table>
+</div>

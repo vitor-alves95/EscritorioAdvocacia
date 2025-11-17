@@ -1,69 +1,121 @@
 ﻿@model EscritorioAdvocacia.Models.Processo
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Abrir Novo Processo";
 }
 
-<h1>Create</h1>
+<h1 class="mb-4"><i class="fas fa-file-plus text-info me-2"></i> Abrir Novo Processo</h1>
 
-<h4>Processo</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NumeroUnificado" class="control-label"></label>
-                <input asp-for="NumeroUnificado" class="form-control" />
-                <span asp-validation-for="NumeroUnificado" class="text-danger"></span>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="NumeroUnificado" class="control-label">Número CNJ/Unificado</label>
+                        <input asp-for="NumeroUnificado" class="form-control" />
+                        <span asp-validation-for="NumeroUnificado" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Titulo" class="control-label"></label>
+                        <input asp-for="Titulo" class="form-control" />
+                        <span asp-validation-for="Titulo" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group mb-3">
+                        <label asp-for="DataAbertura" class="control-label"></label>
+                        <input asp-for="DataAbertura" class="form-control" type="date" />
+                        <span asp-validation-for="DataAbertura" class="text-danger"></span>
+                    </div>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="ClienteId" class="control-label"></label>
+                        <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId">
+                            <option value="">-- Selecione o Cliente --</option>
+                        </select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="AdvogadoId" class="control-label">Advogado Responsável</label>
+                        <select asp-for="AdvogadoId" class="form-control" asp-items="ViewBag.AdvogadoId">
+                            <option value="">-- Selecione o Advogado --</option>
+                        </select>
+                        <span asp-validation-for="AdvogadoId" class="text-danger"></span>
+                    </div>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="StatusAndamento" class="control-label"></label>
-                <input asp-for="StatusAndamento" class="form-control" />
-                <span asp-validation-for="StatusAndamento" class="text-danger"></span>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="TipoProcessoId" class="control-label">Tipo de Processo</label>
+                        <select asp-for="TipoProcessoId" class="form-control" asp-items="ViewBag.TipoProcessoId">
+                            <option value="">-- Selecione o Tipo --</option>
+                        </select>
+                        <span asp-validation-for="TipoProcessoId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="VaraOrigemId" class="control-label">Vara de Origem</label>
+                        <select asp-for="VaraOrigemId" class="form-control" asp-items="ViewBag.VaraOrigemId">
+                            <option value="">-- Selecione a Vara --</option>
+                        </select>
+                        <span asp-validation-for="VaraOrigemId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="StatusAndamento" class="control-label"></label>
+                        <input asp-for="StatusAndamento" class="form-control" />
+                        <span asp-validation-for="StatusAndamento" class="text-danger"></span>
+                    </div>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="DescricaoAndamento" class="control-label"></label>
-                <input asp-for="DescricaoAndamento" class="form-control" />
+
+            <div class="form-group mb-4">
+                <label asp-for="DescricaoAndamento" class="control-label">Descrição Inicial do Andamento</label>
+                <textarea asp-for="DescricaoAndamento" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="DescricaoAndamento" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DataAbertura" class="control-label"></label>
-                <input asp-for="DataAbertura" class="form-control" />
-                <span asp-validation-for="DataAbertura" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClienteId" class="control-label"></label>
-                <select asp-for="ClienteId" class ="form-control" asp-items="ViewBag.ClienteId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdvogadoId" class="control-label"></label>
-                <select asp-for="AdvogadoId" class ="form-control" asp-items="ViewBag.AdvogadoId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoProcessoId" class="control-label"></label>
-                <select asp-for="TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="VaraOrigemId" class="control-label"></label>
-                <select asp-for="VaraOrigemId" class ="form-control" asp-items="ViewBag.VaraOrigemId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group d-flex justify-content-between pt-2">
+                <input type="submit" value="Abrir Processo" class="btn btn-info text-white btn-lg" />
+
+                <a asp-action="Index" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left"></i> Voltar à Lista
+                </a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
