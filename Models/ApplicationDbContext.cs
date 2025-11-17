@@ -16,6 +16,17 @@ namespace EscritorioAdvocacia.Models
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<VaraOrigem>().HasData(
+                new VaraOrigem { Id = 1, Nome = "1ª Vara Cível", Comarca = "São Paulo"},
+                new VaraOrigem { Id = 2, Nome = "Vara de Família e Sucessões", Comarca = "Campinas"},
+                new VaraOrigem { Id = 3, Nome = "Vara do Trabalho", Comarca = "Rio de Janeiro"},
+                new VaraOrigem { Id = 4, Nome = "Juizado Especial Cível", Comarca = "Belo Horizonte" }
+            );
+
+        }
     }
 }
